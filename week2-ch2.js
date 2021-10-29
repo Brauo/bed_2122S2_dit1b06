@@ -46,3 +46,8 @@ let h2 = new hero("bruce", 10)
 h2.fly()
 h2.xrayVision(-1)
 h2.kenahit(20)
+
+let h3 = new hero("clark", 99999)
+h3.fly()
+h3.xrayVision(2000)
+h3.kenahit(1000)
