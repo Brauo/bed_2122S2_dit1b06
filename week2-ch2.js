@@ -34,3 +34,15 @@ f2.multiply(Infinity, 3, //-- a, b
         }
     }   
 )
+
+
+//-- additional test using exported class
+var person = require('./mycode/Person.js');
+var person1 = new person('James', 'Bond');
+console.log(person1.fullName());
+
+let hero = require("./mycode/hero2")
+let h2 = new hero("bruce", 10)
+h2.fly()
+h2.xrayVision(-1)
+h2.kenahit(20)
