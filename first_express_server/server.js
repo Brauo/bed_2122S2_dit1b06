@@ -23,21 +23,37 @@ app.use(function(req, res, next){
     console.log(req.query.id)
 
     //-- experiment with response
-    res.status(200)
-    res.type(".html")
-    res.write("<html><body>response from express. id="+
-        req.query.id    //-- print id on browser
-        +"</body></html>")
-    res.end() //-- end of response writing
+    // res.status(200)
+    // res.type(".html")
+    // res.write("<html><body>response from express. id="+
+    //     req.query.id    //-- print id on browser
+    //     +"</body></html>")
+    // res.end() //-- end of response writing
     //-- redirect demo
     //-- make sure the status, type, write and end above are not run before redirect
     //res.redirect("https://www.sp.edu.sg")
-    //next() //-- done with response . not sending to next middleware
+    return next() //-- done with response . pass to next middleware
 })
 
 // configure express to know what to do
 // first middleware code 
 app.use(serveStatic(__dirname + '/public')) // apply middleware with app.use
+
+// demo how to use GET
+app.get("/product/:id", //-- path
+    (req, res, next) => { //-- callback to handle
+        // do something with the params
+        // example read from database
+        // some sample message to send back
+        var result = {"message":"return product of id " + req.params.id}
+
+        res.status(200)
+        res.type(".json")
+        res.write(JSON.stringify(result))
+        res.end()
+    }
+)
+
 
 // get the express app to run with the server
 app.listen(port, hostname, 
