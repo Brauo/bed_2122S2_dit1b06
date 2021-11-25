@@ -80,14 +80,85 @@ app.put('/user/:id', function (req, res) {
     // simple demo how to get the id in ":id"
     console.log("/:id = " + req.params.id)
     // DO the rest on your own
-
+    var id = req.params.id
+    // get the new email from body
+    var email = req.body.email
+    console.log("id : " + id)
+    console.log("new email : " + email)
+    // create a storage to remember whether id found
+    var idFound = false
+    // loop thru array when id is not found
+    for(var i=0; i<userData.length && !idFound; i++){
+        // check if id is the same as array item's id
+        if(userData[i].userid == id){
+            // set found
+            idFound = true
+            // if same, change email
+            userData[i].email = email
+            // respond
+            res.status(200)
+            res.type('json')
+            // format the json object to respond
+            var jsonRespond = {"message": 
+                "User with <"+id+
+                "> has been successfully updated with new email <"
+                +email+">!"}
+            // respond with the string version of the json object
+            res.end(JSON.stringify(jsonRespond))
+        }
+    } //-- end of for loop
+    // respond if id not found
+    if(!idFound){
+        // respond
+        res.status(404)
+        res.type('json')
+        // format the json object to respond
+        var jsonRespond = {"message": 
+            "User with <"+id+
+            "> not found!"}
+        // respond with the string version of the json object
+        res.end(JSON.stringify(jsonRespond))
+    }
 })
 
 app.delete('/user/:id', function (req, res) {
     // simple demo how to get the id in ":id"
     console.log("/:id = " + req.params.id)
     // DO the rest on your own
-    
+    var id = req.params.id
+    // create a storage to remember whether id found
+    var idFound = false
+    // loop thru array when id is not found
+    for(var i=0; i<userData.length && !idFound; i++){
+        // check if id is the same as array item's id
+        if(userData[i].userid == id){
+            // set found
+            idFound = true
+            // if same, delete this user
+            userData.splice(i, 1)
+            // respond
+            res.status(200)
+            res.type('json')
+            // format the json object to respond
+            var jsonRespond = {"message": 
+                "User with <"+id+
+                "> has been successfully deleted!"}
+            // respond with the string version of the json object
+            res.end(JSON.stringify(jsonRespond))
+        }
+    } //-- end of for loop
+    // respond if id not found
+    if(!idFound){
+        // respond
+        res.status(404)
+        res.type('json')
+        // format the json object to respond
+        var jsonRespond = {"message": 
+            "User with <"+id+
+            "> not found!"}
+        // respond with the string version of the json object
+        res.end(JSON.stringify(jsonRespond))
+    }
 })
 
 app.listen(port, hostname, () => {
