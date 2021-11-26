@@ -2,6 +2,23 @@ var express = require('express');
 var app = express();
 var user = require('../model/user.js'); 
 
+// add get users api
+app.get('/api/user', function (req, res) {
+
+    user.getUsers( function (err, result) {
+        if (!err) {
+            res.send(result);
+        }
+        else{
+            console.log(result);
+
+            res.status(500).send("Some error");
+        }
+    });
+
+});
+
+
 app.get('/api/user/:userid', function (req, res) {
     var id = req.params.userid;
 
