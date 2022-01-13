@@ -1,4 +1,9 @@
 var db = require('./databaseConfig.js');
+
+//chapter 7 add secret key and jwt library
+var config = require("../config.js")
+var jwt = require("jsonwebtoken")
+
 var userDB = {
     deleteUser: function (userid, callback) {
         
@@ -161,7 +166,50 @@ var userDB = {
                 });
             }
         });
-    } //-- end of getUser
+    },  //-- end of getUser
+    // chapter 7 login
+    loginUser: (email, password, callback)=>{
+        // get db conn
+        var conn = db.getConnection()
+        conn.connect((err)=>{
+            if(err){
+                console.log(err)
+                return callback(err, null)
+            }else{
+                console.log("Connected")
+
+                var sql = "select * from user where email=? and password=?"
+
+                conn.query(sql, [email, password], (err, result)=>{
+                    conn.end()
+                    if(err){
+                        // allow you to troubleshoot if err
+                        // print to terminal
+                        console.log(err)
+                        return callback(err, null)
+                    }else{
+                        // return result
+                        //var msg = "{\"result\":\"" + result.length+"\"}"
+                        // sign a token and return back jwt
+                        var token=""
+                        if(result.length==1){
+                            token = jwt.sign(
+                                {
+                                    id:result[0].userid,
+                                    role:result[0].role 
+                                }, //-- payload
+                                config.key, //-- secret key
+                                {
+                                    expiresIn:86400 //-- expire in 24 hours
+                                })
+
+                        }
+                        return callback(null, token)
+                    }
+                })
+            }
+        })
+    }
 }
 
 module.exports = userDB

@@ -7,6 +7,8 @@ var category = require('../model/category.js');
 //-- pg 22 chapter 6
 // import furnitureDB from furniture.js
 var furniture = require('../model/furniture.js');
+//-- chapter 7 add authorisation
+var verifyToken = require("../auth/verifyToken.js")
 
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
@@ -96,7 +98,8 @@ app.put('/api/user/:userid', function (req, res) {
 
 
 // POST
-app.post('/api/user',  function (req, res) {
+// chapter 7 added verifyToken to check authorization
+app.post('/api/user', verifyToken, function (req, res) {
     // get the info posted from postman
     var username = req.body.username;
     var email = req.body.email; 
@@ -147,5 +150,30 @@ app.get('/api/user/:userid', function (req, res) {
     });
 
 });
+
+// chapter 7 add login route
+app.post("/api/login", (req, res)=>{
+    // get user input
+    var email = req.body.email
+    var password = req.body.password
+    // use the login in model
+    user.loginUser(email, password, (err, result)=>{
+        if(!err){
+            res.send("{\"result\":\""+ result + "\"}")
+        }else{
+            res.status(500)
+            res.send(err.statusCode)
+        }
+    })
+})
+
+//-- TEST login MODEL
+// user.loginUser("xyz@mail.com", "xyz123", (err, result)=>{
+//     if(err){
+//         console.log(err)
+//     }else{
+//         console.log(result)
+//     }
+// })
 
 module.exports = app
