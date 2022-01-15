@@ -61,7 +61,8 @@ app.delete('/api/user/:userid', function (req, res) {
     user.deleteUser(userid, function (err, result) {
         if (!err) {
         
-            res.send(result + ' record deleted');
+            //res.send(result + ' record deleted');
+            res.send({"result":result})
         }else{
             console.log(err);
          
@@ -86,7 +87,8 @@ app.put('/api/user/:userid', function (req, res) {
             if(!err){
                 // no error. shiok!
                 console.log(result);
-                res.send(result + ' record updated');
+                //res.send(result + ' record updated');
+                res.send({"result":result})
             }else{
                 // got error !!! 
                 console.log(err)
@@ -110,7 +112,8 @@ app.post('/api/user', verifyToken, function (req, res) {
         function (err, result) {
         if (!err) {
             console.log(result);
-            res.send(result + ' record inserted');
+            //res.send(result + ' record inserted');
+            res.send({"result":result})
         } else{
             res.send(err.statusCode);
 
