@@ -1,9 +1,4 @@
 var db = require('./databaseConfig.js');
-
-//chapter 7 add secret key and jwt library
-var config = require("../config.js")
-var jwt = require("jsonwebtoken")
-
 var userDB = {
     deleteUser: function (userid, callback) {
         
@@ -62,8 +57,10 @@ var userDB = {
                         console.log(err);
                         return callback(err,null);
                     } else {
-                        console.log(result.affectedRows);
-                        return callback(null,result.affectedRows);
+                        // console.log(result.affectedRows);
+                        // return callback(null,result.affectedRows);
+                        console.log(result)
+                        return callback(null, result)
                     }
                 });
 
@@ -92,17 +89,25 @@ var userDB = {
                 conn.query(sql, 
                     [username, email, role, password], 
                     function (err, result) {
-                    conn.end();
+                    //conn.end();
                     
                     if (err) {
                         console.log(err);
                         return callback(err,null);
                         
                     } else {
-
-                        console.log(result.affectedRows);
-                        
-                        return callback(null,result.affectedRows);
+                        // MST demo
+                        var sql2 = "select userid,username from user where userid=?"
+                        //console.log(result.affectedRows);
+                        conn.query(sql2, [result.insertId], (err, result)=>{
+                            conn.end()
+                            if(err){
+                                return callback(err, null)
+                            }else{
+                                return callback(null, result)
+                            }
+                        })
+                        //return callback(null,result.affectedRows);
 
                     }
                 });
@@ -166,50 +171,7 @@ var userDB = {
                 });
             }
         });
-    },  //-- end of getUser
-    // chapter 7 login
-    loginUser: (email, password, callback)=>{
-        // get db conn
-        var conn = db.getConnection()
-        conn.connect((err)=>{
-            if(err){
-                console.log(err)
-                return callback(err, null)
-            }else{
-                console.log("Connected")
-
-                var sql = "select * from user where email=? and password=?"
-
-                conn.query(sql, [email, password], (err, result)=>{
-                    conn.end()
-                    if(err){
-                        // allow you to troubleshoot if err
-                        // print to terminal
-                        console.log(err)
-                        return callback(err, null)
-                    }else{
-                        // return result
-                        //var msg = "{\"result\":\"" + result.length+"\"}"
-                        // sign a token and return back jwt
-                        var token=""
-                        if(result.length==1){
-                            token = jwt.sign(
-                                {
-                                    id:result[0].userid,
-                                    role:result[0].role 
-                                }, //-- payload
-                                config.key, //-- secret key
-                                {
-                                    expiresIn:86400 //-- expire in 24 hours
-                                })
-
-                        }
-                        return callback(null, token)
-                    }
-                })
-            }
-        })
-    }
+    } //-- end of getUser
 }
 
 module.exports = userDB
