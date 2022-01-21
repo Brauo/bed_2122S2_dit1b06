@@ -107,13 +107,15 @@
         return false;
       })
 
+      // get single user data from backend based on userid
+      // userid = user id to match with user table in database 
       function fetch(userid){
         $.ajax({
           method: "GET", 
           url: server+"/user/" + userid,
         }).done(displayResult) //-- reuse displayResult function to display data
       }
-
+      // get all users from user table in database
       function fetchAll(){
         $.ajax({
           method: "GET", 
