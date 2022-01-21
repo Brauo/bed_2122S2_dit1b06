@@ -75,9 +75,72 @@
     </div>
 
     <script>
+      // store backend server url for easy maintenance
+      var server="http://localhost:8081"
+
       // check if there's URL param userid
+      var urlParams = new URLSearchParams(window.location.search);//retrieve the query parameters(eg ?userid=1) from the url
+      console.log(urlParams.has('userid')); // check if userid param is in query string, returns true or false
+      console.log(urlParams.get('userid')); // value of userid param
       // if there is, fetch only this user and display
       // if not, fetch all users and display
+      if(urlParams.has('userid')){
+          //fetch one
+          fetch(urlParams.get('userid'))
+      }else{
+          // fetch all
+          fetchAll()
+      }
+      
+      // clear all tags in #posts
+      $("#posts").empty();
+
+      // add event listener to search button
+      $("#Search").on("click", (evt)=>{
+        // get user input for user id
+        var uid = $("#userid").val();
+        console.log(uid);
+        
+
+        fetch(uid)
+
+        return false;
+      })
+
+      function fetch(userid){
+        $.ajax({
+          method: "GET", 
+          url: server+"/user/" + userid,
+        }).done(displayResult) //-- reuse displayResult function to display data
+      }
+
+      function fetchAll(){
+        $.ajax({
+          method: "GET", 
+          url: server+"/user",
+        }).done(displayResult) //-- reuse displayResult function to display data
+      }
+
+      function displayResult(data){
+        // empty all tags in #posts
+        $("#posts").empty();
+        // data returns as array. 
+        // loop thru array
+        for(var i = 0; i<data.length; i++){
+          // get each item
+          var user = data[i]
+          var html_output = `<div class="card" style="margin-top: 2rem;">
+                            <div class="card-body">
+                                <p class="card-text">${user.username}</p>
+                            </div>
+                            <div class="card-footer text-muted">
+                                ${user.email}
+                            </div>
+                        </div>`
+          // add it to #posts
+          $("#posts").append(html_output)
+        }
+      }
     </script>
   </body>
 </html>

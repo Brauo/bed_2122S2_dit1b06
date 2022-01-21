@@ -27,10 +27,16 @@
             <p><input type="button" id="Logout" value="Log Out" /></p>
         </div>
         <script>
+            // store backend server url for easy maintenance
+            var server="http://localhost:8081"
+
             // 1. fill the form fields with localstorage userinfo
             console.log(localStorage.getItem('userInfo'))
             console.log(localStorage.getItem('token'))
             // userInfo was stored as array
+            // get first item in array
+            // need JSON.parse as the data is stored as a string
+            // need to confirm to JSON object
             var userInfo = JSON.parse(
                 localStorage.getItem('userInfo'))[0]
             var token = localStorage.getItem('token')
@@ -38,6 +44,12 @@
             $("#username").val(userInfo.username)
             $("#role").val(userInfo.role)
             $("#email").val(userInfo.email)
+
+            // NEW 21 jan - update profile pic too. 
+            // ensure you have altered mysql table to include pic column
+            // refer to pg 2 Chap 08
+            // change the src of the img to picture stored in backend server
+            $("#profilepic").attr("src", server+"/image/" + userInfo.pic)
             
             // 2. add event listener to update user
             $("#Update").on("click", (evt)=>{
@@ -56,7 +68,7 @@
                         authorization: "Bearer " + token
                     },
                     url:
-                        "http://localhost:8081/user",
+                        server+"/user",
                     data: {
                         email: email_input,
                         username: username_input, 
