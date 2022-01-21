@@ -14,7 +14,7 @@
 
     <div class="login-form">
         <!--<form action="http://localhost:3001/profile.html"> -->
-        <form action=""> 
+        <form action="#"> 
             <h2 class="text-center">Log in</h2>       
             <div class="form-group">
                 <input type="text" class="form-control" id="email" placeholder="Username" required="required">
@@ -23,8 +23,8 @@
                 <input type="password" class="form-control" id="pwd" placeholder="Password" required="required">
             </div>
             <div class="form-group">
-                <button type="submit" class="btn btn-primary btn-block" id="Login">Log in</button>
-                <!--<button class="btn btn-primary btn-block" id="Login">Log in</button>-->
+                <!--<button type="submit" class="btn btn-primary btn-block" id="Login">Log in</button>-->
+                <button class="btn btn-primary btn-block" id="Login">Log in</button>
             </div>
             <div class="clearfix">
                 <label class="pull-left checkbox-inline"><input type="checkbox"> Remember me</label>
@@ -35,6 +35,10 @@
     <script>
         // internal JS in html
       console.log("hello");
+
+      // store backend server url for easy maintenance
+      var server="http://localhost:8081"
+
       // when user click log in
       // use jquery
       $("#Login").on("click", (evt) => {
@@ -43,14 +47,14 @@
         // collect the email and password from text input
         var email_input = $("#email").val();
         var pwd = $("#pwd").val();
-        console.log("email: " + email);
+        console.log("email: " + email_input);
 
         // do ajax http request to backend server
         // similar to what postman do
         $.ajax({
           method: "POST",
           url:
-            "http://localhost:8081/user/login",
+            server+"/user/login",
           data: {
             email: email_input,
             password: pwd
@@ -64,7 +68,7 @@
               // redirect to profile page
               window.location.assign("profile.html")
           }else{
-              console.log("error")
+              console.log("null msg")
           }
         }).fail(()=>{
             console.log("ajax failed");

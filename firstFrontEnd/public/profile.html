@@ -58,7 +58,7 @@
                 var username_input = $("#username").val()
                 var role_input = $("#role").val()
                 var email_input = $("#email").val()
-                console.log("updating: "+ username + role + email)
+                console.log(`updating: ${username_input} + ${role_input} + ${email_input}`)
 
                 console.log("Bearer " + token)
                 // send this PUT request to backend
@@ -75,9 +75,19 @@
                         role: role_input
                     }
                 }).done((data)=>{
-                    // what to do when response is backend
+                    // what to do when response is returned from backend
                     console.log(data)
+                    // update a message on page
+                    $("#msg").text("Record updated successfully")
                 })
+            })
+
+            // 3. event listener for logout button
+            $("#Logout").on("click", (evt)=>{
+                // logout
+                localStorage.clear()
+                // redirect to login page
+                window.location.assign("login.html")
             })
         </script>
 
