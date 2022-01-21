@@ -11,27 +11,63 @@
     </head>
     <body>
         <div class="card">
-                <img src="http://localhost:3001/profile.jpg" id="profilepic" alt="Profile" style="width:100%">
-                <p class="username"> <label>Username: </label>
-                    <input type="text" id="username"> </br></p>
-                <p class="role"><label>Job role: </label>
-                    <input type="text" id="role"> </br></p>
-                <p class="email"><label>Email: </label>
-                    <input type="text" id="email"> </p>
-                <p><span id="msg"></span></p>
-                <a href="#"><i class="fa fa-dribbble"></i></a> 
-                <a href="#"><i class="fa fa-twitter"></i></a> 
-                <a href="#"><i class="fa fa-linkedin"></i></a> 
-                <a href="#"><i class="fa fa-facebook"></i></a> 
-                <p><input type="button" id="Update" value="Update Profile" /></p>
-                <p><input type="button" id="Logout" value="Log Out" /></p>
-                </div>
+            <img src="http://localhost:3001/profile.jpg" id="profilepic" alt="Profile" style="width:100%">
+            <p class="username"> <label>Username: </label>
+                <input type="text" id="username"> </br></p>
+            <p class="role"><label>Job role: </label>
+                <input type="text" id="role"> </br></p>
+            <p class="email"><label>Email: </label>
+                <input type="text" id="email"> </p>
+            <p><span id="msg"></span></p>
+            <a href="#"><i class="fa fa-dribbble"></i></a> 
+            <a href="#"><i class="fa fa-twitter"></i></a> 
+            <a href="#"><i class="fa fa-linkedin"></i></a> 
+            <a href="#"><i class="fa fa-facebook"></i></a> 
+            <p><input type="button" id="Update" value="Update Profile" /></p>
+            <p><input type="button" id="Logout" value="Log Out" /></p>
+        </div>
         <script>
-            var userInfo = localStorage.getItem("userInfo")
-            var token = localStorage.getItem("token")
+            // 1. fill the form fields with localstorage userinfo
+            console.log(localStorage.getItem('userInfo'))
+            console.log(localStorage.getItem('token'))
+            // userInfo was stored as array
+            var userInfo = JSON.parse(
+                localStorage.getItem('userInfo'))[0]
+            var token = localStorage.getItem('token')
             console.log(userInfo)
-            console.log(token)
+            $("#username").val(userInfo.username)
+            $("#role").val(userInfo.role)
+            $("#email").val(userInfo.email)
+            
+            // 2. add event listener to update user
+            $("#Update").on("click", (evt)=>{
+                // what to do when update button is clicked
+                // read the user input from form fields
+                var username_input = $("#username").val()
+                var role_input = $("#role").val()
+                var email_input = $("#email").val()
+                console.log("updating: "+ username + role + email)
+
+                console.log("Bearer " + token)
+                // send this PUT request to backend
+                $.ajax({
+                    method: "PUT",
+                    headers: { // add auth token for restricted access
+                        authorization: "Bearer " + token
+                    },
+                    url:
+                        "http://localhost:8081/user",
+                    data: {
+                        email: email_input,
+                        username: username_input, 
+                        role: role_input
+                    }
+                }).done((data)=>{
+                    // what to do when response is backend
+                    console.log(data)
+                })
+            })
         </script>
-        
+
     </body>
 </html>
