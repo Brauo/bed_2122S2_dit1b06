@@ -1,4 +1,5 @@
 const express = require("express");
+
 const app = express();
 
 // import the User model
@@ -13,6 +14,11 @@ const bodyParser = require("body-parser");
 // use the middleware
 app.use(bodyParser.json());
 
+// enable cross origin http requests
+var cors = require("cors");
+
+//app.options("*", cors());
+app.use(cors());
 
 app.get("/", (req, res) => {
     res.send("Hello World!");

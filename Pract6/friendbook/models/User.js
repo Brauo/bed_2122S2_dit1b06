@@ -196,9 +196,13 @@ const User = {
         return callback(err, null);
       } else {
         const showFriendQuery =
-        `
-        SELECT * FROM friendship WHERE fk_friend_one_id=?;
-        `;
+        // `
+        // SELECT * FROM friendship WHERE fk_friend_one_id=?;
+        // `
+        `SELECT fk_friend_two_id "id", user.full_name 
+          FROM friendship, user 
+          WHERE fk_friend_one_id=? AND user.id=fk_friend_two_id;`
+        ;
         dbConn.query(
           showFriendQuery,
           [userID],
