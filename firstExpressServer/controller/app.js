@@ -64,6 +64,8 @@ app.post("/user/logout", function (req, res) {
   res.json({ success: true, status: "Log out successful!" });
 });
 
+// update user using PUT
+// inputs : username, email, role
 app.put("/user", verifyToken, function (req, res) {
   var username = req.body.username;
   var email = req.body.email;
@@ -104,6 +106,7 @@ app.post("/user", function (req, res) {
   });
 });
 
+// return all users using GET
 app.get("/user", function (req, res) {
   user.getUsers(function (err, result) {
     if (!err) {

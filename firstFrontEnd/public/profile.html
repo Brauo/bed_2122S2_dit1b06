@@ -86,6 +86,7 @@
             $("#Logout").on("click", (evt)=>{
                 // logout
                 localStorage.clear()
+                // OR localStorage.setItem("userInfo", null)
                 // redirect to login page
                 window.location.assign("login.html")
             })

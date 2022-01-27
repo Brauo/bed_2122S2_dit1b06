@@ -138,6 +138,14 @@
                             <div class="card-footer text-muted">
                                 ${user.email}
                             </div>
+                            <div class="card-footer text-muted">
+                              <a
+                                href="viewUsers.html?userid=${user.userid}"
+                                class="btn btn-primary"
+                                class="View"
+                                >View</a
+                              >
+                            </div>
                         </div>`
           // add it to #posts
           $("#posts").append(html_output)
