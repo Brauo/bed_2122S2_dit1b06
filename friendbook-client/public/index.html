@@ -90,7 +90,44 @@
             .catch((error) => {
                 console.log(error);
             });
+        // section 4.5 publish post
+        $("#create-post-form").submit((event) => {
+            // prevents the page from refreshing
+            event.preventDefault();
 
+            const requestBody = {
+                // getting user input from textarea
+                text_body: $("#create-post-form-body").val(),
+                fk_poster_id: loggedInUserID
+            };
+
+            // create the post
+            axios.post(`${baseUrl}/posts/`, requestBody)
+                .then((response) => {
+                    // reset form value.
+                    $("#create-post-form-body").val("");
+
+                    // fetch the post with the returned postID
+                    axios.get(`${baseUrl}/posts/${response.data.postID}`)
+                        .then((response) => {
+                            const post = response.data;
+                            const postHtml = `
+                            <div class="card" style="margin-top: 2rem;">
+                                <div class="card-body">
+                                    <p class="card-text">${post.text_body}</p>
+                                </div>
+                                <div class="card-footer text-muted">
+                                    ${post.created_at}
+                                </div>
+                            </div>
+                            `;
+                            $("#posts").prepend(postHtml);
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                }); //-- end of axios post request
+            }) //-- end of submit form
     </script>
 </body>
 </html>
